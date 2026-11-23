@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Loan request{% endblock %}
+{% block content %}
+<h1>{{ r.tool }}</h1>
+<p class="muted">Requested by <strong>{{ r.member_name }}</strong> for {{ r.start_date }} &rarr; {{ r.end_date }}</p>
+<p class="muted">{{ r.reason }}</p>
+<p><span class="badge {{ r.status }}">{{ r.status }}</span></p>
+
+{% if role == "Approver" and r.status == "Pending" %}
+<form method="post" action="/requests/{{ r.id }}/decision" class="card">
+  <label>Decision note (required)
+    <textarea name="note" required maxlength="500" rows="2"></textarea>
+  </label>
+  <div class="row">
+    <button name="decision" value="Approved">Approve</button>
+    <button name="decision" value="Rejected" class="secondary">Reject</button>
+  </div>
+</form>
+{% endif %}
+
+<h2>History</h2>
+<table class="table">
+  <thead>
+    <tr><th>When</th><th>Status</th><th>Role</th><th>Note</th></tr>
+  </thead>
+  <tbody>
+    {% for h in r.history %}
+    <tr>
+      <td>{{ h.timestamp }}</td>
+      <td><span class="badge {{ h.status }}">{{ h.status }}</span></td>
+      <td>{{ h.role }}</td>
+      <td>{{ h.note }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">No history yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p><a href="/">&larr; Back to list</a></p>
+{% endblock %}

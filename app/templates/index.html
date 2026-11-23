@@ -1,45 +1,39 @@
 {% extends "base.html" %}
+{% block title %}Equipment loan requests{% endblock %}
 {% block content %}
 <header class="row">
-  <h1>Requests</h1>
+  <h1>Equipment loan requests</h1>
   <form method="post" action="/role" class="inline">
     <label>Viewing as
       <select name="role" onchange="this.form.submit()">
-        <option value="submitter" {% if role == "submitter" %}selected{% endif %}>Submitter</option>
-        <option value="approver" {% if role == "approver" %}selected{% endif %}>Approver</option>
+        {% for r in ROLES %}
+        <option value="{{ r }}" {% if role == r %}selected{% endif %}>{{ r }}</option>
+        {% endfor %}
       </select>
     </label>
   </form>
 </header>
 
-{% if role == "submitter" %}
-<form method="post" action="/requests" class="card">
-  <label>Your name <input name="requester" required maxlength="80"></label>
-  <label>Title <input name="title" required maxlength="120"></label>
-  <label>Details <textarea name="details" maxlength="1000" rows="3"></textarea></label>
-  <button type="submit">Submit request</button>
-</form>
+{% if role == "Member" %}
+<p><a class="button" href="/requests/new">Request a tool</a></p>
 {% endif %}
 
 <nav class="filters">
-  <a href="/">All</a> <a href="/?status=submitted">Pending</a> <a href="/?status=approved">Approved</a> <a href="/?status=rejected">Rejected</a>
+  <a href="/">All</a>
+  {% for s in statuses %}
+  <a href="/?status={{ s }}">{{ s }}</a>
+  {% endfor %}
 </nav>
+
 <ul class="list">
   {% for r in requests %}
   <li>
     <div>
-      <strong>{{ r.title }}</strong> <span class="muted">by {{ r.requester }}</span>
-      <div class="muted">{{ r.details }}</div>
+      <a href="/requests/{{ r.id }}"><strong>{{ r.tool }}</strong></a>
+      <span class="muted">for {{ r.member_name }}</span>
+      <div class="muted">{{ r.start_date }} &rarr; {{ r.end_date }}</div>
       <span class="badge {{ r.status }}">{{ r.status }}</span>
-      {% if r.decision_note %}<span class="muted">Note: {{ r.decision_note }}</span>{% endif %}
     </div>
-    {% if role == "approver" and r.status == "submitted" %}
-    <form method="post" action="/requests/{{ r.id }}/decision" class="inline">
-      <input name="note" placeholder="Note (optional)" maxlength="500">
-      <button name="decision" value="approved">Approve</button>
-      <button name="decision" value="rejected">Reject</button>
-    </form>
-    {% endif %}
   </li>
   {% else %}
   <li class="muted">No requests yet.</li>
