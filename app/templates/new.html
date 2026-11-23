@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}New loan request{% endblock %}
+{% block content %}
+<h1>New loan request</h1>
+<p class="muted">You are submitting as <strong>{{ role }}</strong>.</p>
+<form method="post" action="/requests" class="card">
+  <label>Your name <input name="member_name" required maxlength="80"></label>
+  <label>Tool
+    <select name="tool" required>
+      <option value="" disabled selected>Choose a tool</option>
+      {% for t in TOOLS %}
+      <option value="{{ t }}">{{ t }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Start date <input type="date" name="start_date" required pattern="\d{4}-\d{2}-\d{2}"></label>
+  <label>End date <input type="date" name="end_date" required pattern="\d{4}-\d{2}-\d{2}"></label>
+  <label>Reason <textarea name="reason" required maxlength="1000" rows="3"></textarea></label>
+  <button type="submit">Submit request</button>
+</form>
+<p><a href="/">&larr; Back to list</a></p>
+{% endblock %}

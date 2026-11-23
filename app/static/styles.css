@@ -14,4 +14,9 @@ button { font: inherit; background: var(--accent); color: #fff; border: 0; borde
 .row { display: flex; align-items: center; gap: 12px; }
 .filters { display: flex; gap: 12px; margin: 8px 0 12px; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #eee; }
-.badge.approved { background: #dff5e3; } .badge.rejected { background: #fde2e2; } .badge.submitted { background: #fff3cd; }
+.badge.Approved { background: #dff5e3; } .badge.Rejected { background: #fde2e2; } .badge.Pending { background: #fff3cd; }
+a.button { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 8px 14px; text-decoration: none; }
+button.secondary { background: #b3261e; }
+.table { border-collapse: collapse; width: 100%; background: var(--card); }
+.table th, .table td { border: 1px solid #e6e0ee; padding: 6px 10px; text-align: left; }
+.table th { background: #f3effa; }
